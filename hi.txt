@@ -1,0 +1,28 @@
+{-# OPTIONS_GHC -fno-warn-missing-methods #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
+
+module List where
+
+import Base
+import Letters
+
+class Head list x | list -> x
+instance Head Nil Nil
+instance Head (Cons x xs) x
+
+class Tail list xs | list -> xs
+instance Tail Nil Nil
+instance Tail (Cons x xs) xs
+
+class Length list n | list -> n
+instance Length Nil N0
+instance (Length xs n) => Length (Cons x xs) (Succ n)
+
+type Input = Nil
+
+class Run inp out | inp -> out where
+  solution :: inp -> out
+instance (Length Input n) => Run inp n where solution = nil
