@@ -8,4 +8,6 @@ expect ".*> "
 send ":l running.hs\n"
 expect ".*>"
 send ":t solution nil\n"
+expect ".*>"
+send ":q\n"
 interact

@@ -26,3 +26,5 @@ data W
 data X
 data Y
 data Z
+
+data Space
