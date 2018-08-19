@@ -4,25 +4,41 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module List where
-
 import Base
-import Letters
 
-class Head list x | list -> x
-instance Head Nil Nil
-instance Head (Cons x xs) x
+class MultipleOfThree n t | n -> t
+instance MultipleOfThree N0 True
+instance MultipleOfThree N1 False
+instance MultipleOfThree N2 False
+instance MultipleOfThree n t => MultipleOfThree (Succ (Succ (Succ n))) t
 
-class Tail list xs | list -> xs
-instance Tail Nil Nil
-instance Tail (Cons x xs) xs
+class MultipleOfFive n t | n -> t
+instance MultipleOfFive N0 True
+instance MultipleOfFive N1 False
+instance MultipleOfFive N2 False
+instance MultipleOfFive N3 False
+instance MultipleOfFive N4 False
+instance MultipleOfFive n t => MultipleOfFive (Succ (Succ (Succ (Succ (Succ n))))) t
 
-class Length list n | list -> n
-instance Length Nil N0
-instance (Length xs n) => Length (Cons x xs) (Succ n)
+class ToFizzBuzz n t1 t2 fb | n t1 t2 -> fb
+instance ToFizzBuzz n True True FizzBuzz
+instance ToFizzBuzz n True False Buzz
+instance ToFizzBuzz n False True Fizz
+instance ToFizzBuzz n False False n
+
+data Fizz
+data Buzz
+data FizzBuzz
+
+class AddToList n list list' | n list -> list'
+instance AddToList N0 l l
+instance (MultipleOfFive n t,
+          MultipleOfThree n t',
+          ToFizzBuzz n t t' out,
+          AddToList n list (Cons out list')) => AddToList (Succ n) list list'
 
 type Input = Nil
 
-class Run inp out | inp -> out where
-  solution :: inp -> out
-instance (Length Input n) => Run inp n where solution = nil
+class Answer o where
+  solution :: Input -> o
+instance (AddToList Input ans o) => Answer ans

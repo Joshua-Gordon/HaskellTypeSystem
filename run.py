@@ -2,11 +2,26 @@ import os
 import shutil
 import subprocess
 
+def editFile(file,target,replace):
+    newlines = []
+    with open(file) as f:
+        lines = f.readlines()
+        for l in lines:
+            #print(l)
+            if l.startswith(target):
+                newlines.append(replace)
+            else:
+                newlines.append(l)
+    with open(file,'w') as f:
+        f.writelines(newlines)
 
-if __name__ == '__main__':
-    file = "Main.hs"
-    input = input(">>>")
-    shutil.copyfile(file,"running.hs")
+
+def numinput(num):
+    if int(num) > 20:
+        print("Number too high!")
+    return "type Input = N"+num
+
+def stringinput(string):
     code = "type Input = "
     src = ''.join(input).upper()
     for a in src:
@@ -14,17 +29,22 @@ if __name__ == '__main__':
             a = "Space"
         code += "(Cons " + a + " "
     code += "Nil" + ")"*len(src)
-    #print(code)
-    #search for type Test =
-    newlines = "error"
-    with open("running.hs",'r') as f:
-        lines = f.readlines()
-        newlines = [code if line.startswith("type Input = ") else line for line in lines]
-    with open("running.hs",'w') as f:
-        f.writelines(newlines)
-    s = subprocess.check_output(["./interact.sh"]).split()[-5]
+    return code
+
+def output():
+    s = str(subprocess.check_output(["./interact_noargs.sh"]))
     print("\nOutput:")
     #print(s)
-    print(str(s).count(")")+1)
+    for l in s.split("\\r\\n")[9:-3]:
+        print(l)
     #os.system("./interact.sh")
-    os.system("rm running.hs")
+    #os.system("rm running.hs")
+
+if __name__ == '__main__':
+    file = "Main.hs"
+    input = input(">>>")
+    shutil.copyfile(file,"running.hs")
+    code = numinput(input)
+    print(code)
+    editFile("running.hs","type Input = Nil",code)
+    output()

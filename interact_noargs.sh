@@ -7,7 +7,7 @@ log_user 1
 expect ".*> "
 send ":l running.hs\n"
 expect ".*>"
-send ":t solution_num nil\n"
+send ":t solution\n"
 expect ".*>"
 send ":q\n"
 interact

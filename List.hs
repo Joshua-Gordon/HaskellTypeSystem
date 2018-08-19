@@ -21,8 +21,6 @@ class Length list n | list -> n
 instance Length Nil N0
 instance (Length xs n) => Length (Cons x xs) (Succ n)
 
-type Test = (Cons A (Cons B (Cons C (Cons D Nil))))
-
-class Run inp out | inp -> out where
-  solution :: inp -> out
-instance (Length Test n) => Run inp n where solution = nil
+class Append a b c | a b -> c
+instance Append Nil x x
+instance (Append as bs cs) => Append (Cons a as) bs (Cons a cs)

@@ -37,8 +37,7 @@ instance (MultipleOfFive n t,
           ToFizzBuzz n t t' out,
           AddToList n list (Cons out list')) => AddToList (Succ n) list list'
 
-type Input = N10
-
+type Input = N15
 class Answer o where
   solution :: Input -> o
 instance (AddToList Input ans o) => Answer ans
